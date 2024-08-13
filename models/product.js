@@ -1,4 +1,4 @@
-const { Schema } = require("mongoose");
+const { Schema, model, models } = require("mongoose");
 
 const ProductSchema = new Schema(
     {Pname: String,
@@ -9,3 +9,6 @@ const ProductSchema = new Schema(
     }
 );
 
+const Product = models?.Product || model( 'Product', ProductSchema )
+
+export default Product
