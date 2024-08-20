@@ -21,9 +21,13 @@ export default function Home() {
       {categoriesNames.map(categoryName=>(
         <div key={categoryName}>
           <h2 className="text-2xl capitalize font-bold">{categoryName}</h2>
-          {productsInfo.filter(p=>p.category === categoryName).map(productInfo=>(
+          <div className="flex -mx-5 overflow-x-scroll snap-x scrollbar-hide">
+            {productsInfo.filter(p=>p.category === categoryName).map(productInfo=>(
+              <div key={productInfo._id} className="px-5">
             <Product name={productInfo.name} price={productInfo.price} description={productInfo.description} picture={productInfo.picture}/>
+            </div>
           ))}
+          </div>
         </div>
       ))}
         <div className="py-4"> {/**py is for vertical padding (along y axis) */}
