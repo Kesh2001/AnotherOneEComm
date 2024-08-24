@@ -1,25 +1,42 @@
 'use client';
 
-import { useContext, useEffect, useState } from "react"
-import Layout from "../../components/Layout"
-import { ProductsContext } from "../../components/ProductsContext"
+import { useContext, useEffect, useState } from "react";
+import Layout from "../../components/Layout";
+import { ProductsContext } from "../../components/ProductsContext";
 
+export default function CheckoutPage() {
+  const { selectedProducts } = useContext(ProductsContext);
+  const [productsInfo, setProductsInfo] = useState([]);
 
-export default function CheckoutPage(){
+  useEffect(() => {
+    console.log('Selected Products:', selectedProducts);
 
-    const {selectedProducts} = useContext(ProductsContext)
-    const [ProductsInfo, setProductsInfo]=useState([])
-    
-    useEffect(()=>{
-        const uniqIds = [...new Set(selectedProducts)]
+    // Ensure selectedProducts is an array before mapping
+    if (Array.isArray(selectedProducts)) {
+      const uniqIds = selectedProducts.map(product => 
+        typeof product === 'string' ? product : product._id
+      );
 
-        fetch('/api/products?ids='+uniqIds.join(','))
-        .then(response=>response.json()).then(json=>setProductsInfo(json))
-    },[selectedProducts])
+      if (uniqIds.length > 0) {
+        fetch('/api/products?ids=' + uniqIds.join(','))
+          .then(response => response.json())
+          .then(json => setProductsInfo(json))
+          .catch(err => console.error('Failed to fetch products', err));
+      }
+    } else {
+      console.error('selectedProducts is not an array:', selectedProducts);
+    }
+  }, [selectedProducts]);
 
-    return(
-        <Layout>
-            {selectedProducts.join(',')}
-        </Layout>
-    )
+  return (
+    <Layout>
+      {productsInfo.map(product => (
+        <div key={product._id}>
+          <h2>{product.name}</h2>
+          <p>{product.description}</p>
+          <p>${product.price}</p>
+        </div>
+      ))}
+    </Layout>
+  );
 }

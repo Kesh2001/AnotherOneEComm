@@ -10,7 +10,7 @@ export const ProductsContext = createContext();
 export function ProductsProvider({ children }) {
     // Automatically handles local storage, storing `selectedProducts` under the key 'cart'
     const [selectedProducts, setSelectedProducts] = useLocalStorageState('cart', {
-        defaultValue: 2 // Initializes with an empty array if nothing is in local storage
+        defaultValue: [] // Initializes with an empty array if nothing is in local storage
     });
 
     // For debugging purposes, we log the cart contents whenever they change
